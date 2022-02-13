@@ -24,6 +24,8 @@ timeout = 0 # 0 to disable
 
 hide_backtrace = True
 
+python_executable = 'py' # use py utility instead of python.exe Try to edit this if you're having problems
+
 injector_file = 'injector.py'
 
 python_version = '3.8.9'
@@ -34,7 +36,7 @@ class Injector():
         self.psub = None
 
     def check_python_installed(self):
-        check = subprocess.run([self.winebin, 'python', '--version'], stdout=subprocess.DEVNULL)
+        check = subprocess.run([self.winebin, python_executable, '--version'], stdout=subprocess.DEVNULL)
         if check.returncode == 0:
             return True
         # python not installed inside Wine
@@ -55,7 +57,7 @@ class Injector():
             if not check_python_installed(self):
                 raise Exception('Still can not find python. This is weird...')
 
-        self.psub = subprocess.Popen(f'{self.winebin} python {injector_file}', shell=True, stdin=subprocess.PIPE)
+        self.psub = subprocess.Popen(f'{self.winebin} {python_executable} {injector_file}', shell=True, stdin=subprocess.PIPE)
 
     def detach(self):
         for p in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
