@@ -46,7 +46,9 @@ class Injector():
             filename = f'python-{version}-{arch}.exe'
             url = f'https://www.python.org/ftp/python/{version}/python-{version}{arch}.exe'
             urllib.request.urlretrieve(url, filename)
-            subprocess.run(f'{self.winebin} {filename} /quiet InstallAllUsers=0 PrependPath=1 Include_test=0', shell=True, stdout=subprocess.DEVNULL)
+            install = subprocess.run(f'{self.winebin} {filename} /quiet InstallAllUsers=0 PrependPath=1 Include_test=0', shell=True, stdout=subprocess.DEVNULL)
+            if install.returncode:
+                raise Exception('Installation failed. Try setting your Windows versin to Windows 10')
             os.remove(filename)
             print('Installation finished')
 
