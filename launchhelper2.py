@@ -26,7 +26,7 @@ hide_backtrace = True
 
 injector_file = 'injector.py'
 
-python_version = '3.10.2'
+python_version = '3.8.9'
 
 class Injector():
     def __init__(self, winebin):
@@ -49,7 +49,7 @@ class Injector():
             urllib.request.urlretrieve(url, filename)
             install = subprocess.run(f'{self.winebin} {filename} /quiet InstallAllUsers=0 PrependPath=1 Include_test=0', shell=True, stdout=subprocess.DEVNULL)
             if install.returncode:
-                raise Exception('Installation failed. Try setting your Windows versin to Windows 10')
+                raise Exception('Installation failed. Setting your Windows version to Windows 10 may fix this, if it\' not set already')
             os.remove(filename)
             print('Installation finished')
             if not check_python_installed(self):
