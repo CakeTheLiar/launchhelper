@@ -55,7 +55,7 @@ class Injector():
     def detach(self):
         for p in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
             cmd = iter(p.info['cmdline'])
-            if next(cmd, '').endswith('python.exe') and next(cmd, '') == injector_file:
+            if next(cmd, '').endswith('python.exe') and next(cmd, '').endswith(injector_file):
                 p.send_signal(signal.SIGINT)
                 break
         self.psub.wait(timeout or None)
