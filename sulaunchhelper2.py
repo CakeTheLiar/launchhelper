@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 """
-    requires psutil (pip install psutil)
+    requires psutil, frida (pip install psutil frida)
     
     suLaunchhelper2 will try to lauch the League of Legends client by instrumenting frida (https://frida.re/)
     This version requires sudo or `sysctl kernel.yama.ptrace_scope=0`.
