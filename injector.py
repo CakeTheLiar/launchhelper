@@ -5,9 +5,9 @@ import time
 try:
     import frida
 except:
-    import pip
+    import subprocess
     print('frida not found, installing...')
-    pip.main(['install', 'frida'])
+    subprocess.run([sys.executable, '-m', 'pip', 'install', 'frida'])
     print('install finished')
     import frida
 
