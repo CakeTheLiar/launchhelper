@@ -26,6 +26,8 @@ hide_backtrace = True
 
 injector_file = 'injector.py'
 
+python_version = '3.10.2'
+
 class Injector():
     def __init__(self, winebin):
         self.winebin = winebin
@@ -42,9 +44,8 @@ class Injector():
         if not self.check_python_installed():
             print('Python not found inside WINEPREFIX, installing...')
             arch = '-amd64' if os.environ.get('WINEARCH', 'win32') == 'win64' else ''
-            version = '3.10.2'
-            filename = f'python-{version}-{arch}.exe'
-            url = f'https://www.python.org/ftp/python/{version}/python-{version}{arch}.exe'
+            filename = f'python-{python_version}-{arch}.exe'
+            url = f'https://www.python.org/ftp/python/{python_version}/python-{python_version}{arch}.exe'
             urllib.request.urlretrieve(url, filename)
             install = subprocess.run(f'{self.winebin} {filename} /quiet InstallAllUsers=0 PrependPath=1 Include_test=0', shell=True, stdout=subprocess.DEVNULL)
             if install.returncode:
