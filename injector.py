@@ -12,7 +12,7 @@ except:
     import frida
 
 SELECT_SIGNATURE = "'long', ['long', 'pointer', 'pointer', 'pointer'], 'stdcall'" # return type, [arg types...], abi
-timeout = 5 * 60
+timeout = 1 * 60
 
 class TimeoutException(Exception):
     pass
