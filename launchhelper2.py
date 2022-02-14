@@ -19,6 +19,8 @@ import signal
     It will launch frida by starting a subprocess inside your WINEPREFIX
 """
 
+injector_use_binary = True # setting this to true will download the binary if it doesn't exist already
+
 sleep_time = 1
 timeout = 0 # 0 to disable
 
@@ -26,17 +28,31 @@ hide_backtrace = True
 
 python_executable = 'py' # use py utility instead of python.exe Try to edit this if you're having problems
 
-injector_file = 'injector.py'
+injector_script = 'injector.py'
+injector_binary = 'lhinjector.exe'
+injector_download_url = 'https://github.com/CakeTheLiar/launchhelper/releases/download/v0.1.0-alpha/injector.exe'
+
 
 python_version = '3.8.9'
 
 # These environment variables will get copied from the running process
 copy_env = ('WINE', 'WINEPREFIX', 'WINEARCH', 'WINEESYNC', 'WINEFSYNC')
 
+
+def get_idx_or(myList, idx, default=None):
+    try:
+        return myList[idx]
+    except IndexError:
+        return default
+
 class Injector():
     def __init__(self, winebin):
         self.winebin = winebin
         self.basepath = os.path.dirname(os.path.abspath(__file__))
+        if injector_use_binary:
+            self.fullpath = os.path.join(self.basepath, injector_binary)
+        else:
+            self.fullpath = os.path.join(self.basepath, injector_script)
         self.psub = None
 
     def check_python_installed(self):
@@ -46,7 +62,9 @@ class Injector():
         # python not installed inside Wine
         return False
 
-    def attach(self):
+
+    def _attach_script(self):
+        if injector_use_binary: return
         if not self.check_python_installed():
             print('Python not found inside WINEPREFIX, installing...')
             arch = '-amd64' if os.environ.get('WINEARCH', 'win32') == 'win64' else ''
@@ -61,14 +79,34 @@ class Injector():
             if not self.check_python_installed():
                 raise Exception('Still can not find python. This is weird...')
 
-        self.psub = subprocess.Popen(f'{self.winebin} {python_executable} {self.basepath}/{injector_file}', shell=True, stdin=subprocess.PIPE)
+        self.psub = subprocess.Popen(f'{self.winebin} {python_executable} {self.fullpath}', shell=True, stdin=subprocess.PIPE)
+
+    def _attach_binary(self):
+        if not injector_use_binary: return
+        if not os.path.exists(self.fullpath):
+            print('Downloading injector')
+            urllib.request.urlretrieve(injector_download_url, self.fullpath)
+            print('Download finished')
+        self.psub = subprocess.Popen(f'{self.winebin} {self.fullpath}', shell=True, stdin=subprocess.PIPE)
+
+    def attach(self):
+        if not injector_use_binary:
+            self._attach_script()
+        else:
+            self._attach_binary()
 
     def detach(self):
         for p in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
-            cmd = iter(p.info['cmdline'])
-            if next(cmd, '').endswith('python.exe') and next(cmd, '').endswith(injector_file):
-                p.send_signal(signal.SIGINT)
-                break
+            cmd = p.info['cmdline']
+            if not injector_use_binary:
+                if get_idx_or(cmd, 0, '').endswith('python.exe') and get_idx_or(cmd, 1, '').endswith(injector_script):
+                    p.send_signal(signal.SIGINT)
+                    break
+            else:
+                if p.name().endswith(injector_binary):
+                    p.send_signal(signal.SIGINT)
+                    # don't break, there will be two processes
+
         self.psub.wait(timeout or None)
 
     def attached(self):

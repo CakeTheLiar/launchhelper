@@ -18,9 +18,10 @@
 
   Does not require `sudo`
 
-  This version of Launchhelper 2 will attempt install Python inside of your WINEPREFIX and then automate running injector.py inside of it.
+  This version of Launchhelper 2 will attempt to either install Python inside of your WINEPREFIX and then automate running injector.py inside of it, or it will use a compiled inector if you choose to.
 
-  Installing Python inside of Wine is the most common point of failure. If you're having trouble with this, try `sulaunchhelper.py` instead.
+  There are some config options at the beginning of the file, most notably `injector_use_binary = False`. Setting this to `True` will download the compiled injector binary from the releases tab if it does not already exist. Using this binary will not require installing Python inside of Wine.
+  Installing Python inside of Wine is the most common point of failure. If you're having trouble with it, try the binary injector or try `sulaunchhelper.py` instead.
 
 
 ### injector.py
@@ -36,6 +37,14 @@
   Requires `sudo`
 
   This version of Launchhelper 2 will attempt to inject the necessary patch from outside of Wine. It therefore requires to be run under `sudo`, but does not need to install Python inside your WINEPREFIX, which should make it work more consistently across platforms.
+
+# Build
+
+To build the injector binary, you need a wine environment with a working Python 3 installation. Using that wine environment, run
+```sh
+wine pip install pyinstaller
+wine pyinstaller -F injector.py -n lhinjector.exe
+```
 
 # Troubleshooting
 
