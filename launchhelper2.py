@@ -147,7 +147,7 @@ if __name__ == '__main__':
 
     # copy WINE environment
     wineenv = {k:v for k,v in rclient.process.environ().items() if k in copy_env}
-    wineenv['WINEDEBUG'] = '-all'
+    wineenv.setdefault('WINEDEBUG', '-all')
     winebin = wineenv.pop('WINE')
     os.environ.update(wineenv)
     if not winebin: raise Exception('Wine executable could not be determined')
