@@ -36,6 +36,7 @@ copy_env = ('WINE', 'WINEPREFIX', 'WINEARCH', 'WINEESYNC', 'WINEFSYNC')
 class Injector():
     def __init__(self, winebin):
         self.winebin = winebin
+        self.basepath = os.path.dirname(os.path.abspath(__file__))
         self.psub = None
 
     def check_python_installed(self):
@@ -60,7 +61,7 @@ class Injector():
             if not check_python_installed(self):
                 raise Exception('Still can not find python. This is weird...')
 
-        self.psub = subprocess.Popen(f'{self.winebin} {python_executable} {injector_file}', shell=True, stdin=subprocess.PIPE)
+        self.psub = subprocess.Popen(f'{self.winebin} {python_executable} {self.basepath}/{injector_file}', shell=True, stdin=subprocess.PIPE)
 
     def detach(self):
         for p in psutil.process_iter(attrs=['pid', 'name', 'cmdline']):
