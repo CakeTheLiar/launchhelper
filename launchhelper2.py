@@ -19,7 +19,7 @@ import signal
     It will launch frida by starting a subprocess inside your WINEPREFIX
 """
 
-injector_use_binary = True # setting this to true will download the binary if it doesn't exist already
+injector_use_binary = False # setting this to true will download the binary if it doesn't exist already
 
 sleep_time = 1
 timeout = 0 # 0 to disable
