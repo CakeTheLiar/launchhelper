@@ -30,6 +30,9 @@ injector_file = 'injector.py'
 
 python_version = '3.8.9'
 
+# These environment variables will get copied from the running process
+copy_env = ('WINE', 'WINEPREFIX', 'WINEARCH', 'WINEESYNC', 'WINEFSYNC')
+
 class Injector():
     def __init__(self, winebin):
         self.winebin = winebin
@@ -143,7 +146,7 @@ if __name__ == '__main__':
     print(f'Found {rclient}: pid {rclient.process.pid}')
 
     # copy WINE environment
-    wineenv = {k:v for k,v in rclient.process.environ().items() if k in ('WINE', 'WINEPREFIX', 'WINEARCH', 'WINEESYNC', 'WINEFSYNC')}
+    wineenv = {k:v for k,v in rclient.process.environ().items() if k in copy_env}
     wineenv['WINEDEBUG'] = '-all'
     winebin = wineenv.pop('WINE')
     os.environ.update(wineenv)
