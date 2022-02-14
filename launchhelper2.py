@@ -143,7 +143,7 @@ if __name__ == '__main__':
     print(f'Found {rclient}: pid {rclient.process.pid}')
 
     # copy WINE environment
-    wineenv = {k:v for k,v in rclient.process.environ().items() if k in ('WINE', 'WINEPREFIX', 'WINEARCH')}
+    wineenv = {k:v for k,v in rclient.process.environ().items() if k in ('WINE', 'WINEPREFIX', 'WINEARCH', 'WINEESYNC', 'WINEFSYNC')}
     wineenv['WINEDEBUG'] = '-all'
     winebin = wineenv.pop('WINE')
     os.environ.update(wineenv)
