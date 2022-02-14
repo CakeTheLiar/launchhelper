@@ -47,14 +47,14 @@ Setting your reported Windows version to Windows 10 may sometimes fix this.
 One other possible reason may be that you don't own all the files inside the WINEPREFIX.
 You can fix this by running 
 ```sh
-export $WINEPREFIX=/path/to/wineprefix
+export WINEPREFIX=/path/to/wineprefix
 chown -R $(whoami):$(whoami) $WINEPREFIX
 ```
 
 You can also attempt to install Python manually. This should at least give you a more detailed error message
 ```sh
-export $WINEPREFIX=/path/to/wineprefix
-export $WINEARCH=win32 # or win64, depending on what you use
+export WINEPREFIX=/path/to/wineprefix
+export WINEARCH=win32 # or win64, depending on what you use
 
 wget "https://www.python.org/ftp/python/3.8.9/python-3.8.9.exe"
 # or if you use a 64bit prefix
@@ -71,7 +71,7 @@ This may happen for both versions of the script and it's a bug where `frida` doe
 
 ### For launchhelper2.py / injector.py:
 ```sh
-export $WINEPREFIX=/path/to/wineprefix
+export WINEPREFIX=/path/to/wineprefix
 
 /path/to/wine-lol pip uninstall frida
 /path/to/wine-lol pip install frida
