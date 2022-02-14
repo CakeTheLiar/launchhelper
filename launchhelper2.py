@@ -58,7 +58,7 @@ class Injector():
                 raise Exception('Installation failed. Setting your Windows version to Windows 10 may fix this, if it\' not set already')
             os.remove(filename)
             print('Installation finished')
-            if not check_python_installed(self):
+            if not self.check_python_installed():
                 raise Exception('Still can not find python. This is weird...')
 
         self.psub = subprocess.Popen(f'{self.winebin} {python_executable} {self.basepath}/{injector_file}', shell=True, stdin=subprocess.PIPE)
