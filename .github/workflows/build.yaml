@@ -1,6 +1,5 @@
  
 name: 'Build injector'
-description: 'Builds an executable for the injector using pyinstaller'
 on: 
   push:
     tags:
