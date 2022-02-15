@@ -1,0 +1,33 @@
+ 
+name: 'Build injector'
+description: 'Builds an executable for the injector using pyinstaller'
+on: 
+  push:
+    tags:
+      - "v*"
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with: 
+          python-version: '3.10.2'
+
+      - name: Install Dependencies
+        run:  pip install psutil frida pyinstaller
+
+      - name: Build Injector
+        run:  pyinstaller -F injector.py -n lhinjector.exe
+
+      - name: Tagged Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files:
+            - launchhelper2.py
+            - sulaunchhelper2.py
+            - dist/lhinjector.exe
