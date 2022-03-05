@@ -62,7 +62,6 @@ class Injector():
         # python not installed inside Wine
         return False
 
-
     def _attach_script(self):
         if injector_use_binary: return
         if not self.check_python_installed():
@@ -138,15 +137,6 @@ class Process:
 
     def __repr__(self):
         return self.name
-
-class Symbol:
-    def __init__(self, offset, position, name):
-        self.offset = offset if type(offset) == int else int(offset, 16)
-        self.position = int(position)
-        self.name = name
-    
-    def __repr__(self):
-        return f'Symbol(offset={hex(self.offset)}, position={self.position}, name=\'{self.name}\')'
 
 def check_ssl_connect(host, port, verify=True):
     ctx = ssl.create_default_context()
